@@ -47,11 +47,17 @@ Edit the `cloud-config.yaml` file in the scripts directory and add the public ke
 ```yaml
 #cloud-config
 users:
-  - name: ubuntu
-    groups: sudo
+  - name: web
+    primary_group: web
+    groups: wheel
     shell: /bin/bash
-    ssh_authorized_keys:
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh-authorized-keys:
       - ssh-rsa AAAAB3NzaC1yc2E... your_email@example.com
+
+packages:
+  - nginx
+  - nmap
 ```
 
 ## Terraform Commands
@@ -117,7 +123,7 @@ terraform output instance_ip_addr
 Use the private key to SSH into the instance:
 
 ```bash
-ssh -i ~/.ssh/acit4640wk4 ubuntu@<public_ip_or_dns>
+ssh -i ~/.ssh/acit4640wk4 web@<public_ip_or_dns>
 ```
 
 ### Verify Installed Packages
